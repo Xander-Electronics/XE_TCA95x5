@@ -87,7 +87,6 @@ class TCA95x5 {
    public:
     tca95x5_config_t config;
 
-    TCA95x5();
     void reset_config();
     void begin();
 
