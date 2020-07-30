@@ -63,78 +63,70 @@ void TCA95x5::set_address(bool a0, bool a1, bool a2) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TCA95x5::write_config(tca95x5_config_t config) {
-    write_config(config.mode);
-    write_config(config.output);
-    write_config(config.polarity);
+void TCA95x5::write(tca95x5_config_t config) {
+    write(config.mode);
+    write(config.output);
+    write(config.polarity);
 }
 
-void TCA95x5::write_config(tca95x5_mode_config_t config) { write((uint8_t *)&config, TCA95x5_REGISTER::CONFIG_0); }
+void TCA95x5::write(tca95x5_mode_config_t config) { write((uint8_t *)&config, TCA95x5_REGISTER::CONFIG_0); }
 
-void TCA95x5::write_config(tca95x5_output_config_t config) { write((uint8_t *)&config, TCA95x5_REGISTER::OUTPUT_0); }
+void TCA95x5::write(tca95x5_output_config_t config) { write((uint8_t *)&config, TCA95x5_REGISTER::OUTPUT_0); }
 
-void TCA95x5::write_config(tca95x5_polarity_config_t config) {
-    write((uint8_t *)&config, TCA95x5_REGISTER::POLARITY_INV_0);
-}
+void TCA95x5::write(tca95x5_polarity_config_t config) { write((uint8_t *)&config, TCA95x5_REGISTER::POLARITY_INV_0); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TCA95x5::read_config(tca95x5_config_t &config) {
-    read_config(config.mode);
-    read_config(config.output);
-    read_config(config.polarity);
+void TCA95x5::read(tca95x5_config_t &config) {
+    read(config.mode);
+    read(config.output);
+    read(config.polarity);
 }
 
-void TCA95x5::read_config(tca95x5_mode_config_t &config) { read((uint8_t *)&config, TCA95x5_REGISTER::CONFIG_0); }
+void TCA95x5::read(tca95x5_mode_config_t &config) { read((uint8_t *)&config, TCA95x5_REGISTER::CONFIG_0); }
 
-void TCA95x5::read_config(tca95x5_output_config_t &config) { read((uint8_t *)&config, TCA95x5_REGISTER::OUTPUT_0); }
+void TCA95x5::read(tca95x5_output_config_t &config) { read((uint8_t *)&config, TCA95x5_REGISTER::OUTPUT_0); }
 
-void TCA95x5::read_config(tca95x5_polarity_config_t &config) {
-    read((uint8_t *)&config, TCA95x5_REGISTER::POLARITY_INV_0);
-}
+void TCA95x5::read(tca95x5_polarity_config_t &config) { read((uint8_t *)&config, TCA95x5_REGISTER::POLARITY_INV_0); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TCA95x5::read_status(tca95x5_input_status_t &status) { read((uint8_t *)&status, TCA95x5_REGISTER::INPUT_0); }
+void TCA95x5::read(tca95x5_input_status_t &status) { read((uint8_t *)&status, TCA95x5_REGISTER::INPUT_0); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 tca95x5_config_t TCA95x5::get_config() {
     tca95x5_config_t config;
-    read_config(config);
+    read(config);
     return config;
 }
 
 tca95x5_mode_config_t TCA95x5::get_mode_config() {
     tca95x5_mode_config_t config;
-    read_config(config);
+    read(config);
     return config;
 }
 
 tca95x5_output_config_t TCA95x5::get_output_config() {
     tca95x5_output_config_t config;
-    read_config(config);
+    read(config);
     return config;
 }
 
 tca95x5_polarity_config_t TCA95x5::get_polarity_config() {
     tca95x5_polarity_config_t config;
-    read_config(config);
+    read(config);
     return config;
 }
 
 tca95x5_input_status_t TCA95x5::get_input_status() {
     tca95x5_input_status_t status;
-    read_status(status);
+    read(status);
     return status;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TCA95x5::pin_mode(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_mode_t mode) {
-    bitWrite(config.mode.raw, pin_id, mode);
-}
+void TCA95x5::pin_mode(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_mode_t mode) { bitWrite(config.mode.raw, pin_id, mode); }
 
-void TCA95x5::pin_write(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state) {
-    bitWrite(config.output.raw, pin_id, state);
-}
+void TCA95x5::pin_write(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state) { bitWrite(config.output.raw, pin_id, state); }

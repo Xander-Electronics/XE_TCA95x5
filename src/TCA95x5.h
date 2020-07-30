@@ -139,24 +139,7 @@ typedef enum TCA95x5_PIN_POLARITY {
     TCA95x5_INVERTED = 1,
 } tca95x5_pin_polarity_t;
 
-typedef enum {
-    P00 = 0,
-    P01 = 1,
-    P02 = 2,
-    P03 = 3,
-    P04 = 4,
-    P05 = 5,
-    P06 = 6,
-    P07 = 7,
-    P10 = 8,
-    P11 = 9,
-    P12 = 10,
-    P13 = 11,
-    P14 = 12,
-    P15 = 13,
-    P16 = 14,
-    P17 = 15
-} tca95x5_pin_t;
+typedef enum { P00 = 0, P01 = 1, P02 = 2, P03 = 3, P04 = 4, P05 = 5, P06 = 6, P07 = 7, P10 = 8, P11 = 9, P12 = 10, P13 = 11, P14 = 12, P15 = 13, P16 = 14, P17 = 15 } tca95x5_pin_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -165,19 +148,19 @@ class TCA95x5 {
     void begin(uint8_t address = TCA95x5_DEFAULT_ADDRESS);
     void begin(bool a0, bool a1, bool a2);
 
-    void write_config(tca95x5_config_t config);
-    void write_config(tca95x5_mode_config_t config);
-    void write_config(tca95x5_output_config_t config);
-    void write_config(tca95x5_polarity_config_t config);
+    void write(tca95x5_config_t config);
+    void write(tca95x5_mode_config_t config);
+    void write(tca95x5_output_config_t config);
+    void write(tca95x5_polarity_config_t config);
 
     //
-    void read_config(tca95x5_config_t &config);
-    void read_config(tca95x5_mode_config_t &config);
-    void read_config(tca95x5_output_config_t &config);
-    void read_config(tca95x5_polarity_config_t &config);
+    void read(tca95x5_config_t &config);
+    void read(tca95x5_mode_config_t &config);
+    void read(tca95x5_output_config_t &config);
+    void read(tca95x5_polarity_config_t &config);
 
     //
-    void read_status(tca95x5_input_status_t &status);
+    void read(tca95x5_input_status_t &status);
 
     tca95x5_config_t get_config();
     tca95x5_mode_config_t get_mode_config();
