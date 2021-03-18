@@ -118,7 +118,7 @@ typedef struct {
  * Directionality for I/O pins
  * Pins are initially configured as inputs upon restart.
  */
-typedef enum TCA95x5_PIN_MODE { TCA95x5_INPUT = 1, TCA95x5_OUTPUT = 0 } tca95x5_pin_mode_t;
+typedef enum TCA95x5_pinMode { TCA95x5_INPUT = 1, TCA95x5_OUTPUT = 0 } tca95x5_pinMode_t;
 
 /**
  * Output state of pins.
@@ -145,8 +145,7 @@ typedef enum { P00 = 0, P01 = 1, P02 = 2, P03 = 3, P04 = 4, P05 = 5, P06 = 6, P0
 
 class TCA95x5 {
    public:
-    void begin(uint8_t address = TCA95x5_DEFAULT_ADDRESS);
-    void begin(bool a0, bool a1, bool a2);
+    bool begin(uint8_t address = TCA95x5_DEFAULT_ADDRESS);
 
     void write(tca95x5_config_t config);
     void write(tca95x5_mode_config_t config);
@@ -162,14 +161,18 @@ class TCA95x5 {
     //
     void read(tca95x5_input_status_t &status);
 
-    tca95x5_config_t get_config();
-    tca95x5_mode_config_t get_mode_config();
-    tca95x5_output_config_t get_output_config();
-    tca95x5_polarity_config_t get_polarity_config();
-    tca95x5_input_status_t get_input_status();
+    tca95x5_config_t getConfig();
+    tca95x5_mode_config_t getModeConfig();
+    tca95x5_output_config_t getOutputConfig();
+    tca95x5_polarity_config_t getPolarityConfig();
+    tca95x5_input_status_t getInputStatus();
 
-    void pin_mode(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_mode_t mode);
-    void pin_write(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state);
+    void pinMode(tca95x5_config_t &config, size_t pin_id, tca95x5_pinMode_t mode);
+    void pinWrite(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state);
+
+    void pinMode(int pin, int mode);
+    bool digitalRead(int pin);
+    void digitalWrite(int pin, int status);
 
    private:
     /**
@@ -188,7 +191,6 @@ class TCA95x5 {
 
     uint8_t _device_address;
 
-    void set_address(bool a0, bool a1, bool a2);
     bool read(uint8_t *output, tca95x5_reg_address_t address, uint8_t length = 2);
     bool write(uint8_t *input, tca95x5_reg_address_t address, uint8_t length = 2);
 };

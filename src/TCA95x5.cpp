@@ -47,18 +47,14 @@ bool TCA95x5::write(uint8_t *input, tca95x5_reg_address_t address, uint8_t lengt
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TCA95x5::begin(uint8_t address) { _device_address = address & 0x27; }
-void TCA95x5::begin(bool a0, bool a1, bool a2) { set_address(a0, a1, a2); }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void TCA95x5::set_address(bool a0, bool a1, bool a2) {
-    uint8_t address = 0x20;
-    if (a0) address |= 1;
-    if (a1) address |= (1 << 1);
-    if (a2) address |= (1 << 2);
-
+bool TCA95x5::begin(uint8_t address) { 
     _device_address = address;
+    Wire.begin();  
+    Wire.beginTransmission(_device_address); //Test if device present 
+    if(Wire.endTransmission() != 0) 
+        return 0;
+    else 
+        return 1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,31 +91,31 @@ void TCA95x5::read(tca95x5_input_status_t &status) { read((uint8_t *)&status, TC
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-tca95x5_config_t TCA95x5::get_config() {
+tca95x5_config_t TCA95x5::getConfig() {
     tca95x5_config_t config;
     read(config);
     return config;
 }
 
-tca95x5_mode_config_t TCA95x5::get_mode_config() {
+tca95x5_mode_config_t TCA95x5::getModeConfig() {
     tca95x5_mode_config_t config;
     read(config);
     return config;
 }
 
-tca95x5_output_config_t TCA95x5::get_output_config() {
+tca95x5_output_config_t TCA95x5::getOutputConfig() {
     tca95x5_output_config_t config;
     read(config);
     return config;
 }
 
-tca95x5_polarity_config_t TCA95x5::get_polarity_config() {
+tca95x5_polarity_config_t TCA95x5::getPolarityConfig() {
     tca95x5_polarity_config_t config;
     read(config);
     return config;
 }
 
-tca95x5_input_status_t TCA95x5::get_input_status() {
+tca95x5_input_status_t TCA95x5::getInputStatus() {
     tca95x5_input_status_t status;
     read(status);
     return status;
@@ -127,6 +123,40 @@ tca95x5_input_status_t TCA95x5::get_input_status() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TCA95x5::pin_mode(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_mode_t mode) { bitWrite(config.mode.raw, pin_id, mode); }
+void TCA95x5::pinMode(tca95x5_config_t &config, size_t pin_id, tca95x5_pinMode_t mode) { bitWrite(config.mode.raw, pin_id, mode); }
 
-void TCA95x5::pin_write(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state) { bitWrite(config.output.raw, pin_id, state); }
+void TCA95x5::pinWrite(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state) { bitWrite(config.output.raw, pin_id, state); }
+
+
+void TCA95x5::pinMode(int pin, int mode) {
+    tca95x5_mode_config_t modeConfig = getModeConfig();
+
+    if(mode == INPUT) {
+        modeConfig.raw |= (pin << 1);
+    }
+    else {
+        modeConfig.raw &= ~(pin << 1);
+    }
+
+    write(modeConfig);
+
+}
+
+bool TCA95x5::digitalRead(int pin) {
+    tca95x5_input_status_t inputStatus = getInputStatus();
+
+    return (inputStatus.raw >> pin) & 1;
+}
+
+void TCA95x5::digitalWrite(int pin, int status) {
+    tca95x5_output_config_t outputConfig;
+
+    if(status == LOW) {
+        outputConfig.raw &= ~(pin << 1);
+    }
+    else {
+        outputConfig.raw |= (pin << 1);
+    }
+
+    write(outputConfig);
+}
