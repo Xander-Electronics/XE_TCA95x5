@@ -168,7 +168,7 @@ class TCA95x5 {
     tca95x5_input_status_t getInputStatus();
 
     void pinMode(tca95x5_config_t &config, size_t pin_id, tca95x5_pinMode_t mode);
-    void pinWrite(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state);
+    void digitalWrite(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state);
 
     void pinMode(int pin, int mode);
     bool digitalRead(int pin);

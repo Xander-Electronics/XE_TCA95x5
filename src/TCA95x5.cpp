@@ -123,19 +123,23 @@ tca95x5_input_status_t TCA95x5::getInputStatus() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TCA95x5::pinMode(tca95x5_config_t &config, size_t pin_id, tca95x5_pinMode_t mode) { bitWrite(config.mode.raw, pin_id, mode); }
+void TCA95x5::pinMode(tca95x5_config_t &config, size_t pin_id, tca95x5_pinMode_t mode) { 
+    bitWrite(config.mode.raw, pin_id, mode); 
+}
 
-void TCA95x5::pinWrite(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state) { bitWrite(config.output.raw, pin_id, state); }
+void TCA95x5::digitalWrite(tca95x5_config_t &config, size_t pin_id, tca95x5_pin_output_state_t state) { 
+    bitWrite(config.output.raw, pin_id, state);
+}
 
 
 void TCA95x5::pinMode(int pin, int mode) {
     tca95x5_mode_config_t modeConfig = getModeConfig();
 
     if(mode == INPUT) {
-        modeConfig.raw |= (pin << 1);
+        modeConfig.raw |= (1 << pin);
     }
     else {
-        modeConfig.raw &= ~(pin << 1);
+        modeConfig.raw &= ~(1 << pin);
     }
 
     write(modeConfig);
@@ -151,11 +155,13 @@ bool TCA95x5::digitalRead(int pin) {
 void TCA95x5::digitalWrite(int pin, int status) {
     tca95x5_output_config_t outputConfig;
 
+    outputConfig = getOutputConfig();
+
     if(status == LOW) {
-        outputConfig.raw &= ~(pin << 1);
+        outputConfig.raw &= ~(1 << pin);
     }
     else {
-        outputConfig.raw |= (pin << 1);
+        outputConfig.raw |= (1 << pin);
     }
 
     write(outputConfig);
